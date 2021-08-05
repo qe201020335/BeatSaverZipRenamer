@@ -36,10 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BeatSaverSharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\BeatSaverSharp (1)\BeatSaverSharp.dll</HintPath>
+      <HintPath>Refs\BeatSaverSharp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>U:\SteamLibrary\steamapps\common\Beat Saber\Libs\Newtonsoft.Json.dll</HintPath>
+      <HintPath>Refs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
