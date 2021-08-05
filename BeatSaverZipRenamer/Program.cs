@@ -59,6 +59,10 @@ namespace BeatSaverZipRenamer
                 {
                     PrintLineColor($"{newpath} already exists", ConsoleColor.Yellow);
                 }
+                catch (ArgumentException)
+                {
+                    PrintLineColor($"{newname} not valid or contains invalid characters", ConsoleColor.Yellow);
+                }
                 catch (Exception e)
                 {
                     PrintLineColor(e.ToString(), ConsoleColor.Red);
