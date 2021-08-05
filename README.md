@@ -11,7 +11,7 @@ I don't like this because this hash name doesn't give me any information about t
 
 
 ## HOW TO USE
-1. Download a release and extract all.
+1. Download the [latest release](https://github.com/qe201020335/BeatSaverZipRenamer/releases/latest) and extract all.
 2. Drag the files and folders you want to rename onto `BeatSaverZipRenamer.exe`
 3. Wait for the program to finish.
 
