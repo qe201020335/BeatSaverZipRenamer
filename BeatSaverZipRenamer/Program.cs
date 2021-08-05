@@ -14,17 +14,40 @@ namespace BeatSaverZipRenamer
     {
         private static BeatSaver bs;
         private static string prgname;
-        private static async Task GetNewFileName(string hash)
+        private static async Task<string> GetNewFileName(string hash)
         {
             Beatmap beatmap = await bs.BeatmapByHash(hash);
             if (beatmap == null)
             {
-                Console.WriteLine($"{hash} NOTFOUND or TIMEOUT.");
-                return;
+                Console.WriteLine($"{hash} NOT A HASH or NOTFOUND or TIMEOUT.");
+                return String.Empty;
             }
-            string result = $"{beatmap.ID} ({beatmap.Metadata.SongName} - {beatmap.Metadata.LevelAuthorName}).zip";
+            string result = $"{beatmap.ID} ({beatmap.Metadata.SongName} - {beatmap.Metadata.LevelAuthorName})";
             Console.WriteLine(result);
-            // return result;
+            return result;
+        }
+
+        private static async Task Rename(string path)
+        {
+            string hash = Path.GetFileNameWithoutExtension(path);
+            string parent = Path.GetDirectoryName(path);
+            string extension = Path.GetExtension(path);
+            string newname = await GetNewFileName(hash);
+
+            if (newname != String.Empty)
+            {
+                string newpath = parent + "\\" + newname + extension;
+                Console.WriteLine(newpath);
+                if (Directory.Exists(path))
+                {
+                    // a directory
+                    Directory.Move(path, newpath);
+                }
+                else
+                {
+                    File.Move(path, newpath);
+                }
+            }
         }
 
         public static void Main(string[] args)
@@ -45,9 +68,16 @@ namespace BeatSaverZipRenamer
             
             foreach (string arg in args)
             {
-                string filename = Path.GetFileNameWithoutExtension(arg);
-                tasks.Add(GetNewFileName(filename));
-                Thread.Sleep(250);
+                try
+                {
+                    string fullpath = Path.GetFullPath(arg);
+                    tasks.Add(Rename(fullpath));
+                    Thread.Sleep(250);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
             }
 
             Task.WaitAll(tasks.ToArray());
