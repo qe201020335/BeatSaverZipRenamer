@@ -14,6 +14,7 @@ namespace BeatSaverZipRenamer
     {
         private static BeatSaver bs;
         private static string prgname;
+        private static char[] invalid = Path.GetInvalidFileNameChars();
         private static async Task<string> GetNewFileName(string hash)
         {
             Beatmap beatmap = await bs.BeatmapByHash(hash);
@@ -24,6 +25,8 @@ namespace BeatSaverZipRenamer
                 return String.Empty;
             }
             string result = $"{beatmap.ID} ({beatmap.Metadata.SongName} - {beatmap.Metadata.LevelAuthorName})";
+
+            result = RemoveIllegalChar(result);
             
             PrintColor(hash, ConsoleColor.Blue);
             Console.Write(" is ");
@@ -129,5 +132,16 @@ namespace BeatSaverZipRenamer
         }
 
         public static void PrintLineColor(string content, ConsoleColor color) => PrintColor(content + "\n", color);
+
+        public static string RemoveIllegalChar(string name)
+        {
+            
+            foreach (char c in invalid)
+            {
+                name = name.Replace(c.ToString(), ""); 
+            }
+
+            return name;
+        }
     }
 }
