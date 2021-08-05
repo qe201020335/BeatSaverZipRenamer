@@ -19,11 +19,16 @@ namespace BeatSaverZipRenamer
             Beatmap beatmap = await bs.BeatmapByHash(hash);
             if (beatmap == null)
             {
-                Console.WriteLine($"{hash} NOT A HASH or NOTFOUND or TIMEOUT.");
+                PrintColor(hash, ConsoleColor.Yellow);
+                PrintLineColor(" NOT A HASH or NOTFOUND or TIMEOUT.", ConsoleColor.Magenta);
                 return String.Empty;
             }
             string result = $"{beatmap.ID} ({beatmap.Metadata.SongName} - {beatmap.Metadata.LevelAuthorName})";
-            Console.WriteLine($"{hash} IS {result}");
+            
+            PrintColor(hash, ConsoleColor.Blue);
+            Console.Write(" is ");
+            PrintLineColor(result, ConsoleColor.Green);
+            
             return result;
         }
 
@@ -37,15 +42,26 @@ namespace BeatSaverZipRenamer
             if (newname != String.Empty)
             {
                 string newpath = parent + "\\" + newname + extension;
-                if (Directory.Exists(path))
+                try
                 {
-                    // a directory
-                    Directory.Move(path, newpath);
+                    if (Directory.Exists(path))
+                    {
+                        // a directory
+                        Directory.Move(path, newpath);
+                    }
+                    else if (File.Exists(path))
+                    {
+                        // a file
+                        File.Move(path, newpath);
+                    }
                 }
-                else if (File.Exists(path))
+                catch (IOException)
                 {
-                    // a file
-                    File.Move(path, newpath);
+                    PrintLineColor($"{newpath} already exists", ConsoleColor.Yellow);
+                }
+                catch (Exception e)
+                {
+                    PrintLineColor(e.ToString(), ConsoleColor.Red);
                 }
             }
         }
@@ -72,7 +88,7 @@ namespace BeatSaverZipRenamer
                 {
                     if (!(File.Exists(arg) || Directory.Exists(arg)))
                     {
-                        Console.WriteLine(arg + " DOES NOT EXIST");
+                        PrintLineColor(arg + " DOES NOT EXIST", ConsoleColor.Red);
                         continue;  // not exist
                     }
                     string fullpath = Path.GetFullPath(arg);
@@ -81,7 +97,7 @@ namespace BeatSaverZipRenamer
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.ToString());
+                    PrintLineColor(e.ToString(), ConsoleColor.Red);
                 }
             }
 
@@ -92,5 +108,14 @@ namespace BeatSaverZipRenamer
             Console.Write("\a");
             MessageBox.Show("Done.", prgname);
         }
+
+        public static void PrintColor(string content, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.Write(content);
+            Console.ResetColor();
+        }
+
+        public static void PrintLineColor(string content, ConsoleColor color) => PrintColor(content + "\n", color);
     }
 }
