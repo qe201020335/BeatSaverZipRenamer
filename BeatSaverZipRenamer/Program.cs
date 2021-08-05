@@ -78,7 +78,7 @@ namespace BeatSaverZipRenamer
             int len = args.Length;
             if (len == 0)
             {
-                MessageBox.Show("Drag hash named zips on this tool.", prgname);
+                MessageBox.Show("Drag hash named files or folders on this tool.", prgname);
                 return;
             }
             
@@ -95,6 +95,14 @@ namespace BeatSaverZipRenamer
                         PrintLineColor(arg + " DOES NOT EXIST", ConsoleColor.Red);
                         continue;  // not exist
                     }
+
+                    string name = Path.GetFileName(arg);
+                    if (name.Contains(" "))
+                    {
+                        PrintLineColor(name + " IS NOT A HASH NAMED FILE", ConsoleColor.Yellow);
+                        continue;
+                    }
+                    
                     string fullpath = Path.GetFullPath(arg);
                     tasks.Add(Rename(fullpath));
                     Thread.Sleep(250);
