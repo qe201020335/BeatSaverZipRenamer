@@ -23,7 +23,7 @@ namespace BeatSaverZipRenamer
                 return String.Empty;
             }
             string result = $"{beatmap.ID} ({beatmap.Metadata.SongName} - {beatmap.Metadata.LevelAuthorName})";
-            Console.WriteLine(result);
+            Console.WriteLine($"{hash} IS {result}");
             return result;
         }
 
@@ -37,14 +37,14 @@ namespace BeatSaverZipRenamer
             if (newname != String.Empty)
             {
                 string newpath = parent + "\\" + newname + extension;
-                Console.WriteLine(newpath);
                 if (Directory.Exists(path))
                 {
                     // a directory
                     Directory.Move(path, newpath);
                 }
-                else
+                else if (File.Exists(path))
                 {
+                    // a file
                     File.Move(path, newpath);
                 }
             }
@@ -70,6 +70,11 @@ namespace BeatSaverZipRenamer
             {
                 try
                 {
+                    if (!(File.Exists(arg) || Directory.Exists(arg)))
+                    {
+                        Console.WriteLine(arg + " DOES NOT EXIST");
+                        continue;  // not exist
+                    }
                     string fullpath = Path.GetFullPath(arg);
                     tasks.Add(Rename(fullpath));
                     Thread.Sleep(250);
@@ -84,6 +89,7 @@ namespace BeatSaverZipRenamer
             
             bs.Dispose();
             
+            Console.Write("\a");
             MessageBox.Show("Done.", prgname);
         }
     }
