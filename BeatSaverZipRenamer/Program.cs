@@ -15,6 +15,7 @@ namespace BeatSaverZipRenamer
         private static BeatSaver bs;
         private static string prgname;
         private static char[] invalid = Path.GetInvalidFileNameChars();
+        private static Mutex mut = new Mutex();
         private static async Task<string> GetNewFileName(string hash)
         {
             Beatmap beatmap = await bs.BeatmapByHash(hash);
@@ -126,9 +127,11 @@ namespace BeatSaverZipRenamer
 
         public static void PrintColor(string content, ConsoleColor color)
         {
+            mut.WaitOne();
             Console.ForegroundColor = color;
             Console.Write(content);
             Console.ResetColor();
+            mut.ReleaseMutex();
         }
 
         public static void PrintLineColor(string content, ConsoleColor color) => PrintColor(content + "\n", color);
