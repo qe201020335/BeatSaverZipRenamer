@@ -15,3 +15,4 @@ I don't like this because this hash name doesn't give me any information about t
 2. Drag the files and folders you want to rename onto `BeatSaverZipRenamer.exe`
 3. Wait for the program to finish.
 
+![Demo Usage gif](https://raw.githubusercontent.com/qe201020335/BeatSaverZipRenamer/master/HowToUse.gif)
